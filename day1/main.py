@@ -4,7 +4,7 @@ def part_one(left_list: list[str], right_list: list[str]) -> None:
     Sum the difference between same numbers from the left and right list
     :param left_list: List of sorted numbers
     :param right_list: List of sorted numbers
-    :return:
+    :return: None
     """
     diff_list = list()
     cum_sum = 0
@@ -17,6 +17,13 @@ def part_one(left_list: list[str], right_list: list[str]) -> None:
     print(f"The sum is {cum_sum}")
 
 def part_two(left_list: list[str], right_list: list[str]) -> None:
+    """
+    Sum the multiplying of tho lists. Right list contains the count of given number. Number from left list is multiplied
+    by the corresponding number count.
+    :param left_list: List of sorted numbers
+    :param right_list: List of sorted numbers
+    :return: None
+    """
     numbers_cnt = dict()
     result = 0
 
