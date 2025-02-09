@@ -31,10 +31,17 @@ XMAS.S
             temp_list.append(char)
         input_data_lofl.append(temp_list)
 
+    input_data_lofl_transposed = [list(row) for row in zip(*input_data_lofl)]
+
     xmas_cnt = 0
     for word in ["XMAS", "SAMX"]:
-        # Match horizontally
+        # Match horizontally in standard matrix
         for line in input_data_lofl:
+            if is_word_in_line(line, word):
+                xmas_cnt += 1
+
+        # Match horizontally in transposed matrix
+        for line in input_data_lofl_transposed:
             if is_word_in_line(line, word):
                 xmas_cnt += 1
 
