@@ -1,28 +1,4 @@
 
-def is_word_in_line(line: list[str], word: str) -> bool:
-    word_len = len(word)
-    for char_idx, char in enumerate(line):
-        low_lim = char_idx
-        up_lim = char_idx + word_len
-        line_len = len(line)
-        if up_lim <= line_len:
-            to_test = line[low_lim:up_lim]
-            to_test = "".join(to_test)
-            if word in to_test:
-                return True
-
-def is_word_in_diagonal(line: list[str], word: str) -> bool:
-    word_len = len(word)
-    for char_idx, char in enumerate(line):
-        low_lim = char_idx
-        up_lim = char_idx + word_len
-        line_len = len(line)
-        if up_lim <= line_len:
-            to_test = line[low_lim:up_lim]
-            to_test = "".join(to_test)
-            if word in to_test:
-                return True
-
 def main():
     input_data = """..X...
 .SAMX.
@@ -33,49 +9,55 @@ XMAS.S
     # with open("./input.txt", "r") as fp_input:
     #     input_data = fp_input.read()
 
-    # List of strings
-    input_data_lofs = input_data.split("\n")
     # List of lists (characters)
-    input_data_lofl = []
-    for string in input_data_lofs:
-        temp_list = []
-        for char in string:
-            temp_list.append(char)
-        input_data_lofl.append(temp_list)
+    in_matrix = [[char for char in string] for string in input_data.split("\n")]
+    in_matrix_transposed = [list(row) for row in zip(*in_matrix)]
 
-    input_data_lofl_transposed = [list(row) for row in zip(*input_data_lofl)]
+    kwds_cnt = 0
+    kwds_to_search = ["XMAS"]
+    kwds_full_list = []
+    for kwd in kwds_to_search:
+        kwds_full_list.append(kwd)
+        kwds_full_list.append(kwd[::-1])
 
-    xmas_cnt = 0
-    for word in ["XMAS", "SAMX"]:
-        # Match horizontally in standard matrix
-        for line in input_data_lofl:
-            if is_word_in_line(line, word):
-                xmas_cnt += 1
+    for word in kwds_full_list:
+        word_len = len(word)
+        # Standard matrix
+        for row_idx, row in enumerate(in_matrix):
+            row_idx_min = row_idx
+            row_idx_max = row_idx + word_len
+            matrix_height = len(in_matrix)
+            for col_idx, col in enumerate(row):
+                col_idx_min = col_idx
+                col_idx_max = col_idx + word_len
+                matrix_width = len(row)
 
-        # Match diagonally in standard matrix
-        for line_idx, line in enumerate(input_data_lofl):
-            word_len = len(word)
-            low_lim_row = line_idx
-            up_lim = line_idx + word_len
-            table_len = len(input_data_lofl)
-            if up_lim <= table_len:
-                for char_idx, char in enumerate(line):
-                    low_lim_col = char_idx
-                    up_lim = char_idx + word_len
-                    line_len = len(line)
-                    if up_lim <= line_len:
-                        to_test = []
-                        for t in range(word_len):
-                            to_test.append(input_data_lofl[low_lim_row+t][low_lim_col+t])
-                            if word in "".join(to_test):
-                                xmas_cnt += 1
+                # Match horizontally
+                if col_idx_max <= matrix_width:
+                    to_test = row[col_idx_min:col_idx_max]
+                    to_test = "".join(to_test)
+                    if word in to_test:
+                        kwds_cnt += 1
 
-        # Match horizontally in transposed matrix
-        for line in input_data_lofl_transposed:
-            if is_word_in_line(line, word):
-                xmas_cnt += 1
+                # Match diagonally
+                if col_idx_max <= matrix_width and row_idx_max <= matrix_height:
+                    to_test = [in_matrix[row_idx_min + t][col_idx_min + t] for t in range(word_len)]
+                    if word in "".join(to_test):
+                        kwds_cnt += 1
 
-    print(f"The 'XMAS' count is {xmas_cnt}.")
+        # Transposed matrix - match horizontally
+        for row in in_matrix_transposed:
+            for col_idx, col in enumerate(row):
+                col_idx_min = col_idx
+                row_idx_max = col_idx + word_len
+                matrix_height = len(row)
+                if row_idx_max <= matrix_height:
+                    to_test = row[col_idx_min:row_idx_max]
+                    to_test = "".join(to_test)
+                    if word in to_test:
+                        kwds_cnt += 1
+
+    print(f"The 'XMAS' count is {kwds_cnt}.")
 
 if __name__ == '__main__':
     main()
