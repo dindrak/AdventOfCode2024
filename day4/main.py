@@ -74,15 +74,23 @@ def main():
 XMASAS
 .X.M..
 ..X..."""
+    input_data = """MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX"""
 
-    # with open("./input.txt", "r") as fp_input:
-    #     input_data = fp_input.read()
+    with open("./input.txt", "r") as fp_input:
+        input_data = fp_input.read().strip()
 
     # List of lists (characters)
     in_matrix = [[char for char in string] for string in input_data.split("\n")]
-    in_matrix_transposed = [list(row) for row in zip(*in_matrix)]
 
-    kwds_cnt = 0
     kwds_to_search = ["XMAS"]
     kwd_appearance = get_word_appearance_cnt(in_matrix, kwds_to_search)
 
