@@ -11,6 +11,18 @@ def is_word_in_line(line: list[str], word: str) -> bool:
             if word in to_test:
                 return True
 
+def is_word_in_diagonal(line: list[str], word: str) -> bool:
+    word_len = len(word)
+    for char_idx, char in enumerate(line):
+        low_lim = char_idx
+        up_lim = char_idx + word_len
+        line_len = len(line)
+        if up_lim <= line_len:
+            to_test = line[low_lim:up_lim]
+            to_test = "".join(to_test)
+            if word in to_test:
+                return True
+
 def main():
     input_data = """..X...
 .SAMX.
@@ -39,6 +51,24 @@ XMAS.S
         for line in input_data_lofl:
             if is_word_in_line(line, word):
                 xmas_cnt += 1
+
+        # Match diagonally in standard matrix
+        for line_idx, line in enumerate(input_data_lofl):
+            word_len = len(word)
+            low_lim_row = line_idx
+            up_lim = line_idx + word_len
+            table_len = len(input_data_lofl)
+            if up_lim <= table_len:
+                for char_idx, char in enumerate(line):
+                    low_lim_col = char_idx
+                    up_lim = char_idx + word_len
+                    line_len = len(line)
+                    if up_lim <= line_len:
+                        to_test = []
+                        for t in range(word_len):
+                            to_test.append(input_data_lofl[low_lim_row+t][low_lim_col+t])
+                            if word in "".join(to_test):
+                                xmas_cnt += 1
 
         # Match horizontally in transposed matrix
         for line in input_data_lofl_transposed:
